@@ -25,8 +25,6 @@ class CollectionHeaderView: UICollectionReusableView {
         let tap = UITapGestureRecognizer(target: self, action: #selector(showAndHidden(sender:)))
         self.isUserInteractionEnabled = true
         self.addGestureRecognizer(tap)
-
-        
     }
 
     @objc func showAndHidden(sender: UITapGestureRecognizer) {

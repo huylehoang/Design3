@@ -14,6 +14,14 @@ class ViewController: UIViewController {
     
     var emoticons = [UIImage(named: "emo1"),UIImage(named: "emo2"),UIImage(named: "emo3"),UIImage(named: "emo4"),UIImage(named: "emo5"),UIImage(named: "emo6")]
     
+    var trayOriginalCenter: CGPoint!
+    var trayDownOffSet: CGFloat!
+    var trayUp: CGPoint!
+    var collectionViewTrans: CGPoint!
+    
+    var isTray = false
+    var isChanging = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -41,7 +49,30 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
         let viewHeight = view.frame.height
         let viewWidth = view.frame.width
         collectionView.frame = CGRect(x: 0, y: viewHeight - 40, width: viewWidth, height: view.frame.height/2 - 48)
-        
+        trayDownOffSet = viewHeight/2 - 88
+        trayUp = collectionView.center
+        let panTray = UIPanGestureRecognizer(target: self, action: #selector(didPanTray(rec:)))
+        collectionView.addGestureRecognizer(panTray)
+        collectionView.isUserInteractionEnabled = true
+    }
+    
+    @objc func didPanTray(rec: UIPanGestureRecognizer) {
+        let translation = rec.translation(in: self.view)
+        self.collectionViewTrans = translation
+        if rec.state == .began {
+            isTray = true
+            trayOriginalCenter = collectionView.center
+        } else if rec.state == .changed {
+            isChanging = true
+            collectionView.center = CGPoint(x: trayOriginalCenter.x, y: trayOriginalCenter.y + translation.y)
+            collectionView.reloadData()
+        } else if rec.state == .ended {
+            isTray = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.collectionView.center = self.trayUp
+            })
+            collectionView.reloadData()
+        }
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {

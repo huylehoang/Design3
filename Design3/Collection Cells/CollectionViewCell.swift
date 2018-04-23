@@ -28,6 +28,11 @@ class CollectionViewCell: UICollectionViewCell {
     var selectedIndexPathRow = 0
     var selectedIndexPath: IndexPath!
     
+    var trayOriginalCenter: CGPoint!
+    var trayDownOffSet: CGFloat!
+    var trayUp: CGPoint!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -67,8 +72,19 @@ class CollectionViewCell: UICollectionViewCell {
                     self.transform = CGAffineTransform.identity
                     let cellFrame = self.cellFrame[self.selectedIndexPathRow]
                     self.frame = CGRect(x: cellFrame.minX, y: cellFrame.minY + extra, width: cellFrame.width, height: cellFrame.height)
-                    self.parentVC.collectionView.bringSubview(toFront: self)
                 }, completion: nil)
+                let viewHeight = parentVC.view.frame.height
+                self.trayDownOffSet = viewHeight/2 - 88
+                trayUp = self.center
+                if parentVC.isTray == true {
+                    trayOriginalCenter = self.center
+                } else if parentVC.isChanging == true {
+                    self.center = CGPoint(x: trayOriginalCenter.x, y: trayOriginalCenter.y + parentVC.collectionViewTrans.y)
+                } else if parentVC.isTray == false {
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.center = self.trayUp
+                    })
+                }
             }
             else if y + self.frame.height < extra + 40 {
                 print("New coordinator: x = \(x), y = \(y)")
