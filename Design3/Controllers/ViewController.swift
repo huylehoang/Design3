@@ -48,7 +48,8 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         let viewHeight = view.frame.height
         let viewWidth = view.frame.width
-        collectionView.frame = CGRect(x: 0, y: viewHeight - 40, width: viewWidth, height: view.frame.height/2 - 48)
+//        collectionView.frame = CGRect(x: 0, y: viewHeight - 40, width: viewWidth, height: view.frame.height/2 - 48)
+        collectionView.frame = CGRect(x: 0, y: viewHeight - 40, width: viewWidth, height: view.frame.height)
         trayDownOffSet = viewHeight/2 - 88
         trayUp = collectionView.center
         let panTray = UIPanGestureRecognizer(target: self, action: #selector(didPanTray(rec:)))

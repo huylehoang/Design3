@@ -28,11 +28,6 @@ class CollectionViewCell: UICollectionViewCell {
     var selectedIndexPathRow = 0
     var selectedIndexPath: IndexPath!
     
-    var trayOriginalCenter: CGPoint!
-    var trayDownOffSet: CGFloat!
-    var trayUp: CGPoint!
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -57,13 +52,13 @@ class CollectionViewCell: UICollectionViewCell {
         let y = self.newCoord.y - (rec.view?.frame.height ?? 0) / 2
         self.frame = CGRect(x: x, y: y, width: self.frame.width, height: self.frame.height)
         print("New coordinator: x = \(x), y = \(y)")
-        let extra = self.parentVC.view.frame.height - self.parentVC.collectionView.frame.height
+        let extra = self.parentVC.view.frame.height - self.parentVC.view.frame.height/2 + 48
         if rec.state == .began {
             let selectedIndexPath = parentVC.collectionView.indexPathForItem(at: rec.location(in: parentVC.collectionView))
             self.selectedIndexPath = selectedIndexPath
             self.selectedIndexPathRow = (selectedIndexPath?.row)!
             UIView.animate(withDuration: 0.2, delay: 0, options: [], animations: {
-                self.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+                self.transform = CGAffineTransform(scaleX: 2, y: 2)
             }, completion: nil)
         }
         else if rec.state == .ended {
@@ -73,18 +68,6 @@ class CollectionViewCell: UICollectionViewCell {
                     let cellFrame = self.cellFrame[self.selectedIndexPathRow]
                     self.frame = CGRect(x: cellFrame.minX, y: cellFrame.minY + extra, width: cellFrame.width, height: cellFrame.height)
                 }, completion: nil)
-                let viewHeight = parentVC.view.frame.height
-                self.trayDownOffSet = viewHeight/2 - 88
-                trayUp = self.center
-                if parentVC.isTray == true {
-                    trayOriginalCenter = self.center
-                } else if parentVC.isChanging == true {
-                    self.center = CGPoint(x: trayOriginalCenter.x, y: trayOriginalCenter.y + parentVC.collectionViewTrans.y)
-                } else if parentVC.isTray == false {
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.center = self.trayUp
-                    })
-                }
             }
             else if y + self.frame.height < extra + 40 {
                 print("New coordinator: x = \(x), y = \(y)")
