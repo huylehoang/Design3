@@ -14,12 +14,6 @@ class ViewController: UIViewController {
     
     var emoticons = [UIImage(named: "emo1"),UIImage(named: "emo2"),UIImage(named: "emo3"),UIImage(named: "emo4"),UIImage(named: "emo5"),UIImage(named: "emo6")]
     
-    //var dragView: UIView!
-    
-    var newCoord:CGPoint = CGPoint(x: 0, y: 0)
-    
-    //var cellView: UICollectionViewCell!
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -65,9 +59,7 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell" , for: indexPath) as! CollectionViewCell
         cell.cellImg.image = emoticons[indexPath.row]
-        cell.parentView = self.collectionView
         cell.parentVC = self
-        //cell.cellDelegate = self
         
         return cell
     }
@@ -90,12 +82,4 @@ extension ViewController: UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
 }
-
-//extension ViewController: CollectionViewCellDelegate {
-//    func didReceiveView(dragView: UIView) {
-//        self.dragView = UIView()
-//        self.dragView = dragView
-//        self.view.addSubview(self.dragView)
-//    }
-//}
 
